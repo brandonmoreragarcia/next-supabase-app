@@ -35,6 +35,7 @@
   --bg-hover: var(--neutral-3);
   --border-default: var(--neutral-4);
   --border-strong: var(--neutral-5);
+  --border-hover: var(--neutral-6);
 
   /* Texto */
   --text-primary: var(--neutral-10);
@@ -142,6 +143,7 @@
   --color-hover: var(--bg-hover);
   --color-line: var(--border-default);
   --color-line-strong: var(--border-strong);
+  --color-line-hover: var(--border-hover);
   --color-primary: var(--text-primary);
   --color-secondary: var(--text-secondary);
   --color-muted: var(--text-muted);

@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import { Button } from '@/components/ui/button';
+import { IconButton } from '@/components/ui/icon-button';
+import { Input } from '@/components/ui/input';
 import { ThemeToggle } from './theme-toggle';
 
 export const metadata: Metadata = {
@@ -311,6 +313,69 @@ export default function StyleguidePage() {
           Variantes: primary (única acción con acento por vista), secondary (el default), ghost,
           danger. El spinner de loading reemplaza al ícono para que el ancho no salte.
         </p>
+      </Section>
+
+      <Section title="IconButton">
+        <div className="flex flex-wrap items-center gap-3 rounded-lg border border-line bg-surface p-4">
+          {(['sm', 'md', 'lg'] as const).map((size) => (
+            <IconButton key={size} size={size} aria-label="Editar issue">
+              <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path
+                  d="M11.3 2.7a1.6 1.6 0 0 1 2.3 2.3l-7.3 7.3-3 .7.7-3 7.3-7.3z"
+                  stroke="currentColor"
+                  strokeWidth="1.3"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </IconButton>
+          ))}
+          <IconButton variant="secondary" aria-label="Cerrar">
+            <svg viewBox="0 0 16 16" aria-hidden="true">
+              <path
+                d="M4 4l8 8M12 4l-8 8"
+                stroke="currentColor"
+                strokeWidth="1.3"
+                strokeLinecap="round"
+              />
+            </svg>
+          </IconButton>
+          <IconButton variant="danger" aria-label="Eliminar issue">
+            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path
+                d="M2.5 4.5h11M6.5 4V2.5h3V4M4 4.5l.7 9h6.6l.7-9M6.5 7v4M9.5 7v4"
+                stroke="currentColor"
+                strokeWidth="1.3"
+                strokeLinecap="round"
+              />
+            </svg>
+          </IconButton>
+          <IconButton disabled aria-label="Editar issue">
+            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path
+                d="M11.3 2.7a1.6 1.6 0 0 1 2.3 2.3l-7.3 7.3-3 .7.7-3 7.3-7.3z"
+                stroke="currentColor"
+                strokeWidth="1.3"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </IconButton>
+        </div>
+        <p className="mt-2 text-xs text-muted">
+          aria-label obligatorio a nivel de tipos: sin él no compila. Default ghost — en la UI densa
+          los solo-ícono casi siempre van sin borde.
+        </p>
+      </Section>
+
+      <Section title="Input">
+        <div className="grid max-w-sm gap-3 rounded-lg border border-line bg-surface p-4">
+          <Input placeholder="Nombre del proyecto" />
+          <Input defaultValue="Tracker" />
+          <Input invalid defaultValue="WEB 42" aria-describedby="key-error" />
+          <p id="key-error" className="-mt-2 text-xs text-danger">
+            La clave solo admite letras mayúsculas, sin espacios.
+          </p>
+          <Input disabled placeholder="Deshabilitado" />
+        </div>
       </Section>
 
       <Section title="Foco de teclado">

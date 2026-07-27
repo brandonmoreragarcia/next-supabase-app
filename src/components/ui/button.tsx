@@ -1,8 +1,8 @@
 import type { ComponentPropsWithRef, ReactNode } from 'react';
 import { cn } from '@/lib/cn';
 
-type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
-type ButtonSize = 'sm' | 'md' | 'lg';
+export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
+export type ButtonSize = 'sm' | 'md' | 'lg';
 
 export interface ButtonProps extends ComponentPropsWithRef<'button'> {
   variant?: ButtonVariant;
@@ -13,12 +13,12 @@ export interface ButtonProps extends ComponentPropsWithRef<'button'> {
   loading?: boolean;
 }
 
-const base =
+export const buttonBase =
   'inline-flex items-center justify-center gap-1.5 rounded-md font-medium ' +
   'whitespace-nowrap select-none transition-colors duration-100 ' +
   'disabled:pointer-events-none disabled:opacity-50';
 
-const variants: Record<ButtonVariant, string> = {
+export const buttonVariants: Record<ButtonVariant, string> = {
   primary: 'bg-accent text-accent-fg hover:bg-accent-hover',
   secondary: 'border border-line-strong bg-raised text-primary hover:bg-hover',
   ghost: 'text-secondary hover:bg-hover hover:text-primary',
@@ -66,7 +66,7 @@ export function Button({
     <button
       type={type}
       disabled={disabled || loading}
-      className={cn(base, variants[variant], sizes[size], className)}
+      className={cn(buttonBase, buttonVariants[variant], sizes[size], className)}
       {...rest}
     >
       {loading ? <Spinner /> : icon}
