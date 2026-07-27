@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Button } from '@/components/ui/button';
 import { ThemeToggle } from './theme-toggle';
 
 export const metadata: Metadata = {
@@ -259,6 +260,57 @@ export default function StyleguidePage() {
             </div>
           ))}
         </div>
+      </Section>
+
+      <Section title="Button">
+        <div className="space-y-4 rounded-lg border border-line bg-surface p-4">
+          <div className="flex flex-wrap items-center gap-3">
+            <Button variant="primary">Nuevo issue</Button>
+            <Button>Secundario</Button>
+            <Button variant="ghost">Ghost</Button>
+            <Button variant="danger">Eliminar</Button>
+          </div>
+          <div className="flex flex-wrap items-center gap-3">
+            <Button variant="primary" size="sm">
+              Pequeño
+            </Button>
+            <Button variant="primary" size="md">
+              Mediano
+            </Button>
+            <Button variant="primary" size="lg">
+              Grande
+            </Button>
+          </div>
+          <div className="flex flex-wrap items-center gap-3">
+            <Button
+              variant="primary"
+              icon={
+                <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
+                  <path
+                    d="M7 2.5v9M2.5 7h9"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              }
+            >
+              Con ícono
+            </Button>
+            <Button variant="primary" loading>
+              Guardando
+            </Button>
+            <Button loading>Cargando</Button>
+            <Button variant="primary" disabled>
+              Deshabilitado
+            </Button>
+            <Button disabled>Deshabilitado</Button>
+          </div>
+        </div>
+        <p className="mt-2 text-xs text-muted">
+          Variantes: primary (única acción con acento por vista), secondary (el default), ghost,
+          danger. El spinner de loading reemplaza al ícono para que el ancho no salte.
+        </p>
       </Section>
 
       <Section title="Foco de teclado">

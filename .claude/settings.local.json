@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls \"$HOME/Library/Application Support/\" 2>/dev/null | grep -i -E \"code|devin|cursor|windsurf\")",
+      "Read(//Users/brandonmorera/Library/Application Support/**)",
+      "Bash(find '/Users/brandonmorera/Library/Application Support/Devin' -maxdepth 2 -iname *User*)",
+      "Bash(find '/Users/brandonmorera/Library/Application Support/Devin/User' -maxdepth 3 -iname *profile*)"
+    ]
+  }
+}
