@@ -45,7 +45,7 @@ Cada uno con todos sus estados: default, hover, focus, active, disabled, loading
 `Card` · `Modal` · `DropdownMenu` · `Popover` · `Toast` · `CommandPalette` (⌘K)
 
 **De producto**
-`IssueRow` (fila de la vista lista) · `IssueCard` (tarjeta del kanban, con estado *arrastrando*) · `BoardColumn` (con contador y estado vacío) · `CommentItem` · `ActivityItem` (evento del timeline) · `Sidebar` · `Topbar` con breadcrumbs · `OrgSwitcher`
+`IssueRow` (fila de la vista lista) · `IssueCard` (tarjeta del kanban, con estado _arrastrando_) · `BoardColumn` (con contador y estado vacío) · `CommentItem` · `ActivityItem` (evento del timeline) · `Sidebar` · `Topbar` con breadcrumbs · `OrgSwitcher`
 
 **Estados de la app**
 `EmptyState` (3 variantes: sin proyectos, sin issues, sin resultados de búsqueda) · `Skeleton` para lista y tablero · `ErrorState`
@@ -54,7 +54,7 @@ Cada uno con todos sus estados: default, hover, focus, active, disabled, loading
 
 1. **Login / registro** — email + botón de GitHub
 2. **Onboarding** — crear organización o aceptar invitación
-3. **Tablero del proyecto** — kanban, 5 columnas, con la barra de filtros. *La pantalla insignia del proyecto.*
+3. **Tablero del proyecto** — kanban, 5 columnas, con la barra de filtros. _La pantalla insignia del proyecto._
 4. **Vista lista** — tabla densa, agrupable, con selección múltiple
 5. **Detalle del issue** — descripción, propiedades a la derecha, comentarios y timeline de actividad
 6. **Miembros de la organización** — tabla con roles e invitaciones pendientes

@@ -19,21 +19,22 @@ Una persona se registra, crea o se une a una **organización**, dentro de la org
 
 No es por el producto en sí (hay mil clones de Linear). Es porque el camino más corto para tocar **todo lo que se pregunta en una entrevista de este stack** pasa por acá:
 
-| Lo que el producto obliga a resolver | Lo que demuestra |
-|---|---|
-| Una org no puede ver los datos de otra | **Row Level Security multi-tenant** — el tema más difícil de Supabase y el que casi nadie hace bien |
-| Roles `owner` / `admin` / `member` | Autorización a nivel de base de datos, no de UI |
-| El tablero se actualiza cuando otro usuario mueve una tarjeta | **Realtime** + estado optimista en React |
-| Issues numeradas `WEB-42` por proyecto | Triggers y funciones en Postgres, concurrencia |
-| Listados rápidos con filtros y búsqueda | Índices, `tsvector`, paginación con cursor |
-| Formularios que mutan datos | **Server Actions** + validación en el servidor |
-| Adjuntar imágenes a un issue | Supabase Storage con políticas de acceso |
+| Lo que el producto obliga a resolver                          | Lo que demuestra                                                                                    |
+| ------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| Una org no puede ver los datos de otra                        | **Row Level Security multi-tenant** — el tema más difícil de Supabase y el que casi nadie hace bien |
+| Roles `owner` / `admin` / `member`                            | Autorización a nivel de base de datos, no de UI                                                     |
+| El tablero se actualiza cuando otro usuario mueve una tarjeta | **Realtime** + estado optimista en React                                                            |
+| Issues numeradas `WEB-42` por proyecto                        | Triggers y funciones en Postgres, concurrencia                                                      |
+| Listados rápidos con filtros y búsqueda                       | Índices, `tsvector`, paginación con cursor                                                          |
+| Formularios que mutan datos                                   | **Server Actions** + validación en el servidor                                                      |
+| Adjuntar imágenes a un issue                                  | Supabase Storage con políticas de acceso                                                            |
 
 Esa columna derecha es, literalmente, el temario de la entrevista.
 
 ### Alcance (qué entra y qué no)
 
 **Entra (v1):**
+
 - Auth por email + OAuth (GitHub)
 - Organizaciones, invitaciones por email, roles
 - Proyectos con clave corta (`WEB`, `API`)
@@ -45,6 +46,7 @@ Esa columna derecha es, literalmente, el temario de la entrevista.
 - Tests + CI + deploy público
 
 **No entra (queda como "próximos pasos" en el README):**
+
 - Notificaciones por email/push
 - Sprints, estimaciones, roadmaps
 - API pública, webhooks
@@ -56,16 +58,16 @@ Recortar el alcance a propósito y documentarlo también es señal de criterio p
 
 ## 2. Stack técnico
 
-| Capa | Elección | Por qué |
-|---|---|---|
-| Framework | **Next.js (App Router)** | Es lo que piden. Server Components + Server Actions es el modelo mental actual |
-| Lenguaje | **TypeScript** en modo `strict` | Tipos generados desde el schema de Supabase, end-to-end |
-| Base de datos | **Postgres vía Supabase** | Migraciones versionadas en el repo con el CLI, no clicks en el dashboard |
-| Auth | **Supabase Auth** + `@supabase/ssr` | Sesión en cookies, middleware de refresh |
-| Estilos | **Tailwind CSS** + componentes propios | Los componentes salen de Claude Design (Fase 1) |
-| Validación | **Zod** | Un solo esquema para el form y para el Server Action |
-| Tests | **Vitest** (unit) · **Playwright** (e2e) · **SQL** (políticas RLS) | Testear las RLS es el detalle que diferencia |
-| CI/CD | **GitHub Actions** → **Vercel** | Lint, typecheck, tests y migraciones en cada PR |
+| Capa          | Elección                                                           | Por qué                                                                        |
+| ------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------------ |
+| Framework     | **Next.js (App Router)**                                           | Es lo que piden. Server Components + Server Actions es el modelo mental actual |
+| Lenguaje      | **TypeScript** en modo `strict`                                    | Tipos generados desde el schema de Supabase, end-to-end                        |
+| Base de datos | **Postgres vía Supabase**                                          | Migraciones versionadas en el repo con el CLI, no clicks en el dashboard       |
+| Auth          | **Supabase Auth** + `@supabase/ssr`                                | Sesión en cookies, middleware de refresh                                       |
+| Estilos       | **Tailwind CSS** + componentes propios                             | Los componentes salen de Claude Design (Fase 1)                                |
+| Validación    | **Zod**                                                            | Un solo esquema para el form y para el Server Action                           |
+| Tests         | **Vitest** (unit) · **Playwright** (e2e) · **SQL** (políticas RLS) | Testear las RLS es el detalle que diferencia                                   |
+| CI/CD         | **GitHub Actions** → **Vercel**                                    | Lint, typecheck, tests y migraciones en cada PR                                |
 
 **Decisión deliberada:** nada de ORM (Prisma/Drizzle) en v1. Vas a escribir SQL y usar el cliente de Supabase directo. Si en la entrevista te preguntan por RLS, índices o `explain analyze`, querés haber tocado eso a mano, no detrás de una abstracción.
 
@@ -78,6 +80,7 @@ Este es el punto central de la propuesta. El riesgo obvio de construir esto con 
 ### Reparto por capas
 
 **Yo escribo** (lo repetitivo, lo que no se pregunta en entrevistas):
+
 - Configuración: `tsconfig`, ESLint, Prettier, Tailwind, `next.config`, workflows de CI
 - Layouts, estructura de rutas, componentes de presentación puros
 - Markup de formularios, estados de carga, skeletons
@@ -85,6 +88,7 @@ Este es el punto central de la propuesta. El riesgo obvio de construir esto con 
 - Archivos de migración **vacíos**, con comentarios de qué debe contener cada uno
 
 **Vos escribís** (todo lo que define si sabés el stack):
+
 - **Todo el SQL**: schema, índices, funciones, triggers y **cada política RLS**
 - **Server Actions** y validación
 - **Data fetching**: queries a Supabase, Server Components que cargan datos
@@ -102,6 +106,7 @@ Este es el punto central de la propuesta. El riesgo obvio de construir esto con 
 ### Cuando te trabes
 
 Pedime ayuda y te doy pistas en escalones, no la respuesta:
+
 - **Nivel 1** — dónde mirar ("esto es un problema de recursión en la policy, mirá qué tabla consulta").
 - **Nivel 2** — la técnica que lo resuelve, sin código.
 - **Nivel 3** — código, pero de un caso análogo, no del tuyo.
@@ -120,18 +125,18 @@ En `docs/notas-aprendizaje.md` vas anotando, en tus palabras, lo que fuiste ente
 
 Detalle completo, con objetivos de aprendizaje y reparto tarea por tarea, en [`docs/03-roadmap.md`](./docs/03-roadmap.md).
 
-| # | Fase | Foco | Estimado |
-|---|---|---|---|
-| 0 | Setup | Repo, Next.js, Supabase local, tipos generados | 1 sesión |
-| 1 | **Diseño** | Design system en Claude Design → componentes en el repo | 1–2 sesiones |
-| 2 | Auth y perfiles | `@supabase/ssr`, cookies, middleware, rutas protegidas | 2 sesiones |
-| 3 | **Multi-tenancy y RLS** | Orgs, miembros, roles, políticas. **El corazón del proyecto** | 3 sesiones |
-| 4 | Proyectos e issues | CRUD con Server Actions, numeración por trigger | 3 sesiones |
-| 5 | Tablero y realtime | Kanban, drag & drop, suscripciones, estado optimista | 2 sesiones |
-| 6 | Comentarios, adjuntos, actividad | Storage con políticas, log de auditoría | 2 sesiones |
-| 7 | Búsqueda y performance | `tsvector`, índices, `explain analyze`, paginación | 1–2 sesiones |
-| 8 | Tests, CI, deploy | Vitest, Playwright, tests de RLS, Actions, Vercel | 2 sesiones |
-| 9 | Pulido para postular | README, datos de demo, video, caso técnico escrito | 1 sesión |
+| #   | Fase                             | Foco                                                          | Estimado     |
+| --- | -------------------------------- | ------------------------------------------------------------- | ------------ |
+| 0   | Setup                            | Repo, Next.js, Supabase local, tipos generados                | 1 sesión     |
+| 1   | **Diseño**                       | Design system en Claude Design → componentes en el repo       | 1–2 sesiones |
+| 2   | Auth y perfiles                  | `@supabase/ssr`, cookies, middleware, rutas protegidas        | 2 sesiones   |
+| 3   | **Multi-tenancy y RLS**          | Orgs, miembros, roles, políticas. **El corazón del proyecto** | 3 sesiones   |
+| 4   | Proyectos e issues               | CRUD con Server Actions, numeración por trigger               | 3 sesiones   |
+| 5   | Tablero y realtime               | Kanban, drag & drop, suscripciones, estado optimista          | 2 sesiones   |
+| 6   | Comentarios, adjuntos, actividad | Storage con políticas, log de auditoría                       | 2 sesiones   |
+| 7   | Búsqueda y performance           | `tsvector`, índices, `explain analyze`, paginación            | 1–2 sesiones |
+| 8   | Tests, CI, deploy                | Vitest, Playwright, tests de RLS, Actions, Vercel             | 2 sesiones   |
+| 9   | Pulido para postular             | README, datos de demo, video, caso técnico escrito            | 1 sesión     |
 
 Las fases 3 y 8 son las que más pesan en una entrevista. Si el tiempo aprieta, se recorta de 6 y 7, nunca de esas dos.
 
@@ -141,11 +146,12 @@ Las fases 3 y 8 son las que más pesan en una entrevista. Si el tiempo aprieta, 
 
 El proyecto arranca por el diseño, antes de escribir la app.
 
-**En Claude Design** (claude.ai/design) armamos un *design system* como proyecto: tokens (color, tipografía, espaciado, radios) y los componentes de UI en HTML/CSS aislados — botones, inputs, badges de estado y prioridad, avatares, tarjeta de issue, modal, menú, toast, sidebar, estado vacío, skeleton. Más mockups de las 5 pantallas clave.
+**En Claude Design** (claude.ai/design) armamos un _design system_ como proyecto: tokens (color, tipografía, espaciado, radios) y los componentes de UI en HTML/CSS aislados — botones, inputs, badges de estado y prioridad, avatares, tarjeta de issue, modal, menú, toast, sidebar, estado vacío, skeleton. Más mockups de las 5 pantallas clave.
 
 **Luego lo bajamos al repo** con la herramienta de sincronización de Claude Design, componente por componente, y los portamos a React + Tailwind.
 
 Por qué en este orden:
+
 - Decidir el diseño primero evita el look de "app generada por IA" que un entrevistador reconoce al instante.
 - Tener el sistema de componentes cerrado antes de programar significa que cada feature después es lógica, no pelearse con CSS. Eso protege el tiempo para lo que importa.
 - Es la única fase donde tiene sentido que la parte visual venga mayormente hecha: el trabajo visual no es lo que te van a preguntar.
