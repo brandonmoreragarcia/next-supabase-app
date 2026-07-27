@@ -2,6 +2,10 @@ import type { Metadata } from 'next';
 import { Button } from '@/components/ui/button';
 import { IconButton } from '@/components/ui/icon-button';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Select } from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Toggle } from '@/components/ui/toggle';
 import { ThemeToggle } from './theme-toggle';
 
 export const metadata: Metadata = {
@@ -376,6 +380,53 @@ export default function StyleguidePage() {
           </p>
           <Input disabled placeholder="Deshabilitado" />
         </div>
+      </Section>
+
+      <Section title="Textarea y Select">
+        <div className="grid max-w-sm gap-3 rounded-lg border border-line bg-surface p-4">
+          <Textarea placeholder="Describe el problema. Se admite markdown." />
+          <Textarea invalid defaultValue="x" aria-describedby="desc-error" />
+          <p id="desc-error" className="-mt-2 text-xs text-danger">
+            La descripción necesita al menos 10 caracteres.
+          </p>
+          <Select defaultValue="in_progress">
+            <option value="backlog">Backlog</option>
+            <option value="todo">Todo</option>
+            <option value="in_progress">In progress</option>
+            <option value="done">Done</option>
+            <option value="canceled">Canceled</option>
+          </Select>
+          <Select disabled defaultValue="none">
+            <option value="none">Deshabilitado</option>
+          </Select>
+        </div>
+      </Section>
+
+      <Section title="Checkbox y Toggle">
+        <div className="grid max-w-sm gap-3 rounded-lg border border-line bg-surface p-4">
+          <label className="flex cursor-pointer items-center gap-2.5 text-sm text-primary">
+            <Checkbox /> Seleccionar issue
+          </label>
+          <label className="flex cursor-pointer items-center gap-2.5 text-sm text-primary">
+            <Checkbox defaultChecked /> Marcado por defecto
+          </label>
+          <label className="flex items-center gap-2.5 text-sm text-disabled">
+            <Checkbox disabled /> Deshabilitado
+          </label>
+          <label className="flex cursor-pointer items-center gap-2.5 text-sm text-primary">
+            <Toggle /> Notificaciones del proyecto
+          </label>
+          <label className="flex cursor-pointer items-center gap-2.5 text-sm text-primary">
+            <Toggle defaultChecked /> Realtime activado
+          </label>
+          <label className="flex items-center gap-2.5 text-sm text-disabled">
+            <Toggle disabled /> Deshabilitado
+          </label>
+        </div>
+        <p className="mt-2 text-xs text-muted">
+          Ambos usan un input nativo invisible debajo del dibujo: teclado, formularios y lectores de
+          pantalla funcionan sin JavaScript. Probá Space con el foco puesto.
+        </p>
       </Section>
 
       <Section title="Foco de teclado">
