@@ -6,6 +6,11 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Toggle } from '@/components/ui/toggle';
+import { Avatar, AvatarGroup } from '@/components/ui/avatar';
+import { StatusBadge } from '@/components/ui/status-badge';
+import { PriorityIndicator } from '@/components/ui/priority-indicator';
+import { LabelChip } from '@/components/ui/label-chip';
+import { Tooltip } from '@/components/ui/tooltip';
 import { ThemeToggle } from './theme-toggle';
 
 export const metadata: Metadata = {
@@ -104,121 +109,82 @@ export default function StyleguidePage() {
         </p>
       </Section>
 
-      <Section title="Estados de issue">
-        <div className="flex flex-wrap items-center gap-4">
-          <span className="inline-flex items-center gap-2 text-sm text-secondary">
-            <span
-              className="size-[9px] rounded-full border-[1.5px] border-dashed"
-              style={{ borderColor: 'var(--status-backlog)' }}
-            />
-            Backlog
-          </span>
-          <span className="inline-flex items-center gap-2 text-sm text-secondary">
-            <span
-              className="size-[9px] rounded-full border-[1.5px]"
-              style={{ borderColor: 'var(--status-todo)' }}
-            />
-            Todo
-          </span>
-          <span className="inline-flex items-center gap-2 text-sm text-secondary">
-            <span
-              className="size-[9px] rounded-full border-[1.5px]"
-              style={{
-                borderColor: 'var(--status-in-progress)',
-                background: `linear-gradient(90deg, var(--status-in-progress) 50%, transparent 50%)`,
-              }}
-            />
-            In progress
-          </span>
-          <span className="inline-flex items-center gap-2 text-sm text-secondary">
-            <svg width="13" height="13" viewBox="0 0 13 13" aria-hidden="true">
-              <circle
-                cx="6.5"
-                cy="6.5"
-                r="5.75"
-                fill="var(--status-done)"
-                stroke="var(--status-done)"
-                strokeWidth="1.5"
-              />
-              <path
-                d="M4 6.5l1.8 1.8L9 5"
-                stroke="var(--bg-app)"
-                strokeWidth="1.5"
-                fill="none"
-                strokeLinecap="round"
-              />
-            </svg>
-            Done
-          </span>
-          <span className="inline-flex items-center gap-2 text-sm text-secondary">
-            <svg width="13" height="13" viewBox="0 0 13 13" aria-hidden="true">
-              <circle
-                cx="6.5"
-                cy="6.5"
-                r="5.75"
-                fill="none"
-                stroke="var(--status-canceled)"
-                strokeWidth="1.5"
-              />
-              <path
-                d="M4.5 4.5l4 4M8.5 4.5l-4 4"
-                stroke="var(--status-canceled)"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-              />
-            </svg>
-            Canceled
-          </span>
+      <Section title="StatusBadge">
+        <div className="flex flex-wrap items-center gap-3 rounded-lg border border-line bg-surface p-4">
+          {(['backlog', 'todo', 'in_progress', 'done', 'canceled'] as const).map((s) => (
+            <StatusBadge key={s} status={s} />
+          ))}
+          <span className="mx-2 h-4 w-px bg-line" />
+          {(['backlog', 'todo', 'in_progress', 'done', 'canceled'] as const).map((s) => (
+            <StatusBadge key={s} status={s} iconOnly />
+          ))}
         </div>
         <p className="mt-2 text-xs text-muted">
-          Cada estado tiene forma propia además de color — distinguibles con daltonismo.
+          Cada estado tiene forma propia además de color — distinguibles con daltonismo. La versión
+          iconOnly conserva el nombre para lectores de pantalla y como title.
         </p>
       </Section>
 
-      <Section title="Prioridad">
-        <div className="flex flex-wrap items-center gap-5">
-          {(['none', 'low', 'medium', 'high'] as const).map((level, i) => (
-            <span key={level} className="inline-flex items-end gap-2 text-sm text-secondary">
-              <span className="inline-flex items-end gap-[1.5px]" aria-hidden="true">
-                {[0, 1, 2].map((bar) => (
-                  <span
-                    key={bar}
-                    className="w-[3px] rounded-[1px]"
-                    style={{
-                      height: `${5 + bar * 3}px`,
-                      background: bar < i ? 'var(--priority-fg)' : 'var(--priority-off)',
-                    }}
-                  />
-                ))}
-              </span>
-              {level}
-            </span>
+      <Section title="PriorityIndicator">
+        <div className="flex flex-wrap items-center gap-5 rounded-lg border border-line bg-surface p-4">
+          {(['none', 'low', 'medium', 'high', 'urgent'] as const).map((p) => (
+            <PriorityIndicator key={p} priority={p} withLabel />
           ))}
-          <span
-            className="inline-flex items-center gap-1.5 text-sm"
-            style={{ color: 'var(--priority-urgent)' }}
-          >
-            <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
-              <rect
-                x="1"
-                y="1"
-                width="12"
-                height="12"
-                rx="3"
-                fill="var(--danger-bg)"
-                stroke="var(--priority-urgent)"
-                strokeWidth="1.5"
-              />
-              <path
-                d="M7 4v3.2M7 9.6v.4"
-                stroke="var(--priority-urgent)"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-              />
-            </svg>
-            urgent
-          </span>
+          <span className="mx-2 h-4 w-px bg-line" />
+          {(['none', 'low', 'medium', 'high', 'urgent'] as const).map((p) => (
+            <PriorityIndicator key={p} priority={p} />
+          ))}
         </div>
+      </Section>
+
+      <Section title="Avatar y AvatarGroup">
+        <div className="flex flex-wrap items-center gap-5 rounded-lg border border-line bg-surface p-4">
+          <Avatar name="Brandon Morera" size="sm" />
+          <Avatar name="Brandon Morera" size="md" />
+          <Avatar name="Brandon Morera" size="lg" />
+          <Avatar name="Ada" size="md" />
+          <span className="mx-2 h-4 w-px bg-line" />
+          <AvatarGroup max={3}>
+            <Avatar name="Brandon Morera" />
+            <Avatar name="Grace Hopper" />
+            <Avatar name="Alan Turing" />
+            <Avatar name="Ada Lovelace" />
+            <Avatar name="Margaret Hamilton" />
+          </AvatarGroup>
+        </div>
+        <p className="mt-2 text-xs text-muted">
+          Sin foto, las iniciales son el fallback (no un ícono genérico). El grupo recorta en max y
+          suma el resto en +N.
+        </p>
+      </Section>
+
+      <Section title="LabelChip y Tooltip">
+        <div className="flex flex-wrap items-center gap-3 rounded-lg border border-line bg-surface p-4">
+          <LabelChip name="bug" color="#e5484d" />
+          <LabelChip name="auth" color="#6e79d6" />
+          <LabelChip name="seguridad" color="#e5a13c" />
+          <LabelChip name="docs" color="#4cc38a" />
+          <span className="mx-2 h-4 w-px bg-line" />
+          <Tooltip label="Asignado a Brandon Morera">
+            <Avatar name="Brandon Morera" />
+          </Tooltip>
+          <Tooltip label="Editar issue" side="bottom">
+            <IconButton aria-label="Editar issue">
+              <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path
+                  d="M11.3 2.7a1.6 1.6 0 0 1 2.3 2.3l-7.3 7.3-3 .7.7-3 7.3-7.3z"
+                  stroke="currentColor"
+                  strokeWidth="1.3"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </IconButton>
+          </Tooltip>
+        </div>
+        <p className="mt-2 text-xs text-muted">
+          El chip usa el color solo como punto: el texto queda en tokens y no hay que calcular
+          contraste por etiqueta. El tooltip aparece también con foco de teclado — probá con Tab.
+        </p>
       </Section>
 
       <Section title="Tipografía">
