@@ -11,7 +11,9 @@ import { StatusBadge } from '@/components/ui/status-badge';
 import { PriorityIndicator } from '@/components/ui/priority-indicator';
 import { LabelChip } from '@/components/ui/label-chip';
 import { Tooltip } from '@/components/ui/tooltip';
+import { Card } from '@/components/ui/card';
 import { ThemeToggle } from './theme-toggle';
+import { ModalDemo } from './modal-demo';
 
 export const metadata: Metadata = {
   title: 'Styleguide — Tracker',
@@ -392,6 +394,30 @@ export default function StyleguidePage() {
         <p className="mt-2 text-xs text-muted">
           Ambos usan un input nativo invisible debajo del dibujo: teclado, formularios y lectores de
           pantalla funcionan sin JavaScript. Probá Space con el foco puesto.
+        </p>
+      </Section>
+
+      <Section title="Card y Modal">
+        <div className="grid gap-3 sm:grid-cols-2">
+          <Card>
+            <h3 className="text-sm font-medium text-primary">Card con padding</h3>
+            <p className="mt-1 text-sm text-secondary">
+              La superficie por defecto para agrupar contenido.
+            </p>
+          </Card>
+          <Card flush>
+            <div className="border-b border-line px-4 py-2 text-sm text-primary">flush: fila 1</div>
+            <div className="px-4 py-2 text-sm text-secondary">
+              Para listas que manejan su propio padding por fila.
+            </div>
+          </Card>
+        </div>
+        <div className="mt-3">
+          <ModalDemo />
+        </div>
+        <p className="mt-2 text-xs text-muted">
+          El modal usa dialog nativo: probá Esc, click afuera, y que Tab quede atrapado adentro
+          mientras está abierto.
         </p>
       </Section>
 
