@@ -24,6 +24,7 @@ auth.users (lo maneja Supabase)
 ```
 
 ### `profiles`
+
 Espejo público de `auth.users`. Existe porque `auth.users` no se debe exponer al cliente.
 
 `id` (FK a `auth.users`, PK) · `full_name` · `avatar_url` · `created_at`
@@ -31,24 +32,29 @@ Espejo público de `auth.users`. Existe porque `auth.users` no se debe exponer a
 Se crea sola con un trigger `after insert on auth.users`.
 
 ### `organizations`
-El límite del *tenant*. Todo dato del producto cuelga de acá.
+
+El límite del _tenant_. Todo dato del producto cuelga de acá.
 
 `id` · `name` · `slug` (único, va en la URL) · `created_at`
 
 ### `organization_members`
+
 Tabla puente. **Es la tabla más importante del sistema de permisos:** define quién ve qué.
 
 `org_id` · `user_id` · `role` (`owner` | `admin` | `member`) · `created_at` — PK compuesta `(org_id, user_id)`
 
 ### `invitations`
+
 `id` · `org_id` · `email` · `role` · `token` · `expires_at` · `accepted_at`
 
 ### `projects`
+
 `id` · `org_id` · `name` · `key` (2–5 letras mayúsculas, ej. `WEB`) · `description` · `issue_counter` · `archived_at`
 
 `key` es único dentro de la org. `issue_counter` alimenta la numeración de issues.
 
 ### `issues`
+
 `id` · `project_id` · `number` (secuencial por proyecto) · `title` · `description` · `status` · `priority` · `assignee_id` · `created_by` · `created_at` · `updated_at` · `search_vector`
 
 Se muestran como `WEB-42`. `(project_id, number)` es único.
@@ -59,17 +65,21 @@ Se muestran como `WEB-42`. `(project_id, number)` es único.
 Ambos como `enum` de Postgres, no como `text`.
 
 ### `comments`
+
 `id` · `issue_id` · `author_id` · `body` · `created_at` · `edited_at`
 
 ### `attachments`
+
 `id` · `issue_id` · `storage_path` · `filename` · `size_bytes` · `mime_type` · `uploaded_by`
 
 ### `issue_events`
+
 Log de auditoría — cada cambio de estado, responsable o prioridad deja rastro. Alimenta el timeline del issue.
 
 `id` · `issue_id` · `actor_id` · `type` · `data` (jsonb) · `created_at`
 
 ### `labels` / `issue_labels`
+
 Etiquetas por organización, relación N:N con issues.
 
 ---
@@ -80,7 +90,7 @@ Estos son los que te van a hacer aprender de verdad. No están resueltos acá a 
 
 ### 1. La recursión infinita en las políticas RLS
 
-La política natural sobre `organization_members` es *"puedo ver las filas de las organizaciones a las que pertenezco"*. Escrita de la forma obvia:
+La política natural sobre `organization_members` es _"puedo ver las filas de las organizaciones a las que pertenezco"_. Escrita de la forma obvia:
 
 ```
 policy on organization_members:
@@ -91,7 +101,7 @@ policy on organization_members:
                                     tabla... que evalúa la política...
 ```
 
-Postgres corta con `infinite recursion detected in policy for relation "organization_members"`. Es *el* error clásico de Supabase multi-tenant.
+Postgres corta con `infinite recursion detected in policy for relation "organization_members"`. Es _el_ error clásico de Supabase multi-tenant.
 
 **Tu tarea (Fase 3):** entender por qué pasa y resolverlo. La pista es que existe una forma de que una función SQL consulte una tabla **sin** que se apliquen sus políticas. Buscá `SECURITY DEFINER` y prestá atención al `search_path`, que ahí hay un agujero de seguridad si lo hacés mal.
 
@@ -108,10 +118,11 @@ La solución ingenua es `SELECT max(number) + 1`. Falla en cuanto dos personas c
 Un issue no tiene `org_id`. Su acceso depende de `project_id → org_id → organization_members`. Cada lectura de issue implica seguir esa cadena.
 
 **Tu tarea (Fase 3–4):** decidir el trade-off.
+
 - **Normalizado** (seguir la cadena en cada policy): sin datos duplicados, pero un `join` por cada verificación.
 - **Desnormalizado** (guardar `org_id` también en `issues`): policies más simples y rápidas, pero hay que garantizar que nunca se desincronice.
 
-No hay respuesta correcta universal — hay una respuesta correcta *para este caso*, y tenés que poder defenderla. Esta es exactamente la clase de pregunta que aparece en una entrevista senior.
+No hay respuesta correcta universal — hay una respuesta correcta _para este caso_, y tenés que poder defenderla. Esta es exactamente la clase de pregunta que aparece en una entrevista senior.
 
 ---
 
