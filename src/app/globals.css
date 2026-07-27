@@ -95,17 +95,15 @@
   --neutral-10: #e4e5ea;
   --neutral-11: #f4f4f6;
 
-  --bg-app: var(--neutral-1);
-  --bg-surface: var(--neutral-2);
+  /*
+   * Acá van SOLO los tokens que difieren del mapeo de :root.
+   * Todo lo que deriva de la escala (--border-default, --text-*…) se
+   * actualiza solo al redefinirse --neutral-N, porque data-theme vive
+   * en <html> — el mismo elemento que :root.
+   */
+  --bg-surface: var(--neutral-2); /* en oscuro no hay blanco puro: cada superficie sube un paso */
   --bg-raised: var(--neutral-3);
   --bg-hover: var(--neutral-4);
-  --border-default: var(--neutral-4);
-  --border-strong: var(--neutral-5);
-
-  --text-primary: var(--neutral-10);
-  --text-secondary: var(--neutral-8);
-  --text-muted: var(--neutral-7);
-  --text-disabled: var(--neutral-6);
 
   --accent: #6e79d6;
   --accent-hover: #7f89e0;
