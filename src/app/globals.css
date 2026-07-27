@@ -1,26 +1,216 @@
 @import 'tailwindcss';
 
+/*
+ * Sistema de tokens — Fase 1 (ver docs/02-brief-diseno.md)
+ *
+ * Dos capas:
+ *   1. Escala cruda `--neutral-N` (1 = fondo de app, 11 = texto más fuerte).
+ *      Se invierte entre temas, así que N siempre significa "contraste N".
+ *   2. Tokens semánticos (--bg-*, --text-*, --border-*, --accent-*, estados).
+ *      Los componentes SOLO consumen esta capa.
+ *
+ * El tema se controla con data-theme en <html>. Sin data-theme, sigue al sistema.
+ */
+
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Escala neutra — tema claro (grises fríos, tinte azulado) */
+  --neutral-1: #fbfbfc;
+  --neutral-2: #f4f4f6;
+  --neutral-3: #eff0f3;
+  --neutral-4: #e2e3e8;
+  --neutral-5: #d5d7de;
+  --neutral-6: #b9bcc6;
+  --neutral-7: #8a8d99;
+  --neutral-8: #5c5f6b;
+  --neutral-9: #3a3c46;
+  --neutral-10: #26272e;
+  --neutral-11: #1a1b20;
+
+  /* Superficies y bordes */
+  --bg-app: var(--neutral-1);
+  --bg-surface: #ffffff;
+  --bg-raised: var(--neutral-2);
+  --bg-hover: var(--neutral-3);
+  --border-default: var(--neutral-4);
+  --border-strong: var(--neutral-5);
+
+  /* Texto */
+  --text-primary: var(--neutral-10);
+  --text-secondary: var(--neutral-8);
+  --text-muted: var(--neutral-7);
+  --text-disabled: var(--neutral-6);
+
+  /* Acento (índigo) — acción primaria, foco, selección. Nada más. */
+  --accent: #5a66c9;
+  --accent-hover: #4d58b8;
+  --accent-fg: #ffffff;
+  --accent-bg: #edeffc;
+  --accent-text: #454fa3;
+  --focus-ring: rgba(90, 102, 201, 0.4);
+
+  /* Semánticos: texto / fondo / borde por rol */
+  --success-text: #1f7a45;
+  --success-bg: #e5f5eb;
+  --success-border: #bfe5cd;
+  --warning-text: #8a6215;
+  --warning-bg: #fbf3e0;
+  --warning-border: #ead9b5;
+  --danger-text: #b03a3a;
+  --danger-bg: #fbe9e9;
+  --danger-border: #f0c9c9;
+  --info-text: #2563a8;
+  --info-bg: #e8f1fb;
+  --info-border: #c4dcf3;
+
+  /* Estados de issue — cada uno tiene además una FORMA (no solo color) */
+  --status-backlog: var(--neutral-7);
+  --status-todo: var(--neutral-8);
+  --status-in-progress: #b98a2e;
+  --status-done: var(--accent);
+  --status-canceled: var(--neutral-7);
+
+  /* Prioridad — neutra salvo urgente */
+  --priority-fg: var(--neutral-8);
+  --priority-off: var(--neutral-4);
+  --priority-urgent: var(--danger-text);
+
+  /* Sombras (3 niveles) */
+  --shadow-1: 0 1px 2px rgba(20, 21, 26, 0.06);
+  --shadow-2: 0 2px 8px rgba(20, 21, 26, 0.1);
+  --shadow-3: 0 8px 24px rgba(20, 21, 26, 0.16);
 }
 
+[data-theme='dark'] {
+  --neutral-1: #0e0f13;
+  --neutral-2: #15161c;
+  --neutral-3: #1c1d24;
+  --neutral-4: #26272e;
+  --neutral-5: #34363f;
+  --neutral-6: #4a4d59;
+  --neutral-7: #7a7d89;
+  --neutral-8: #a6a9b4;
+  --neutral-9: #c9cbd3;
+  --neutral-10: #e4e5ea;
+  --neutral-11: #f4f4f6;
+
+  --bg-app: var(--neutral-1);
+  --bg-surface: var(--neutral-2);
+  --bg-raised: var(--neutral-3);
+  --bg-hover: var(--neutral-4);
+  --border-default: var(--neutral-4);
+  --border-strong: var(--neutral-5);
+
+  --text-primary: var(--neutral-10);
+  --text-secondary: var(--neutral-8);
+  --text-muted: var(--neutral-7);
+  --text-disabled: var(--neutral-6);
+
+  --accent: #6e79d6;
+  --accent-hover: #7f89e0;
+  --accent-fg: #ffffff;
+  --accent-bg: #22243a;
+  --accent-text: #8b93e8;
+  --focus-ring: rgba(110, 121, 214, 0.45);
+
+  --success-text: #7bd8a0;
+  --success-bg: #1e3a2b;
+  --success-border: #2c5540;
+  --warning-text: #e5b567;
+  --warning-bg: #3d311a;
+  --warning-border: #5a4826;
+  --danger-text: #ec8b8b;
+  --danger-bg: #3e2226;
+  --danger-border: #5c3237;
+  --info-text: #7fb5ec;
+  --info-bg: #1e2e40;
+  --info-border: #2c4460;
+
+  --status-in-progress: #e5b567;
+  --status-done: #8b93e8;
+
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-2: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-3: 0 8px 24px rgba(0, 0, 0, 0.55);
+}
+
+/* Puente a Tailwind: genera utilidades (bg-surface, text-muted, border-strong…) */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-*: initial;
+  --color-app: var(--bg-app);
+  --color-surface: var(--bg-surface);
+  --color-raised: var(--bg-raised);
+  --color-hover: var(--bg-hover);
+  --color-line: var(--border-default);
+  --color-line-strong: var(--border-strong);
+  --color-primary: var(--text-primary);
+  --color-secondary: var(--text-secondary);
+  --color-muted: var(--text-muted);
+  --color-disabled: var(--text-disabled);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-fg: var(--accent-fg);
+  --color-accent-bg: var(--accent-bg);
+  --color-accent-text: var(--accent-text);
+  --color-success: var(--success-text);
+  --color-success-bg: var(--success-bg);
+  --color-success-border: var(--success-border);
+  --color-warning: var(--warning-text);
+  --color-warning-bg: var(--warning-bg);
+  --color-warning-border: var(--warning-border);
+  --color-danger: var(--danger-text);
+  --color-danger-bg: var(--danger-bg);
+  --color-danger-border: var(--danger-border);
+  --color-info: var(--info-text);
+  --color-info-bg: var(--info-bg);
+  --color-info-border: var(--info-border);
+  --color-white: #ffffff;
+  --color-transparent: transparent;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Tipografía: sistema para UI, mono para claves de issue y código */
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'Cascadia Code', 'Roboto Mono', Menlo, monospace;
+
+  /* Escala tipográfica (6 tamaños) */
+  --text-2xs: 0.6875rem; /* 11px — metadatos, contadores */
+  --text-2xs--line-height: 1rem;
+  --text-xs: 0.75rem; /* 12px — badges, labels */
+  --text-xs--line-height: 1.125rem;
+  --text-sm: 0.8125rem; /* 13px — cuerpo denso (el default de la app) */
+  --text-sm--line-height: 1.25rem;
+  --text-base: 0.875rem; /* 14px — cuerpo cómodo, formularios */
+  --text-base--line-height: 1.375rem;
+  --text-lg: 1rem; /* 16px — títulos de sección */
+  --text-lg--line-height: 1.5rem;
+  --text-xl: 1.25rem; /* 20px — títulos de página */
+  --text-xl--line-height: 1.75rem;
+
+  /* Radios (3 valores) */
+  --radius-*: initial;
+  --radius-sm: 0.25rem; /* 4px — badges, chips */
+  --radius-md: 0.375rem; /* 6px — botones, inputs, cards */
+  --radius-lg: 0.5rem; /* 8px — modales, popovers, columnas */
+  --radius-full: 9999px;
+
+  --shadow-*: initial;
+  --shadow-1: var(--shadow-1);
+  --shadow-2: var(--shadow-2);
+  --shadow-3: var(--shadow-3);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg-app);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  line-height: var(--text-sm--line-height);
+}
+
+/* Teclado primero: anillo de foco propio, consistente en toda la app */
+:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--focus-ring);
 }

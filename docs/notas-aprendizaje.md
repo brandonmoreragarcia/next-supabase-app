@@ -37,3 +37,10 @@ Temas donde pedí la solución en vez de resolverlos, o que quedaron a medias. V
 ## Entradas
 
 <!-- La primera va en la Fase 0 -->
+```
+## [27 jul] — setup
+** setup de la arquitectura (docker para levantar supabase y postgres, auth, etc.)**
+** publisable key viaja en el frontend, es público por diseño, lo que no puede viajar es la secret key **
+** el RLS (Row Level Security) controla el acceso a los datos a nivel de fila **
+** RSL con 0 politicas niega todo por defecto, se configuran para otorgar acceso, no denegarlo.
+```
